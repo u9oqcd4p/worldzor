@@ -56,7 +56,24 @@ PlayState::handleInput(const SDL_Event& event)
 void
 PlayState::draw()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	/* I have no idea why the program crashes when or-ing the two parameters
+	 * instead of calling the function twice o_O
+	 *
+	 * #0  0xb72f5720 in ?? () from /usr/lib/dri/i915_dri.so
+	 * #1  0xb7271884 in _tnl_run_pipeline () from /usr/lib/dri/i915_dri.so
+	 * #2  0xb71c46b9 in ?? () from /usr/lib/dri/i915_dri.so
+	 * #3  0xb7271df5 in _tnl_draw_prims () from /usr/lib/dri/i915_dri.so
+	 * #4  0xb726a420 in ?? () from /usr/lib/dri/i915_dri.so
+	 * #5  0xb7190425 in intel_clear_tris () from /usr/lib/dri/i915_dri.so
+	 * #6  0xb71908de in ?? () from /usr/lib/dri/i915_dri.so
+	 * #7  0xb71e27a9 in _mesa_Clear () from /usr/lib/dri/i915_dri.so
+	 * #8  0x0806bc78 in PlayState::draw (this=0x8fd83c0)
+	 *     at /src/states/play_state.cpp:63
+	 */
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(30.0, 800/600.0, 0.1, 1000.0);
